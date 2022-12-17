@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import subprocess
+import getpass
 
 from argparse import ArgumentParser
 from typing import Dict, List, Optional
@@ -179,6 +180,12 @@ def environ_or_required(key):
         else {'required': True}
     )
 
+def get_password(key, promt):
+    return (
+        {'default': os.environ.get(key)} if os.environ.get(key)
+        else {'default': getpass.getpass(promt)}
+    )
+
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -194,7 +201,7 @@ parser.add_argument(
 parser.add_argument(
     '--database-password',
     help='Password for KeePass database',
-    **environ_or_required('DATABASE_PASSWORD'),
+    **get_password('DATABASE_PASSWORD', 'KeePass database password: ')
 )
 parser.add_argument(
     '--database-keyfile',
