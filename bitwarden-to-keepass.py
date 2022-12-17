@@ -35,6 +35,7 @@ def bitwarden_to_keepass(args):
         logging.error(f'Wrong password for KeePass database: {e}')
         return
 
+    subprocess.check_output([args.bw_path, 'sync'], encoding='utf8')
     folders = subprocess.check_output([args.bw_path, 'list', 'folders', '--session', args.bw_session], encoding='utf8')
     folders = json.loads(folders)
     groups_by_id = load_folders(folders)
