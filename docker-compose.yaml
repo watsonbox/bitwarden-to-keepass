@@ -4,7 +4,10 @@ services:
     build: .
     command: >
       bash -c '
-        python3 bitwarden-to-keepass.py --bw-session `$BW_PATH login --raw || $BW_PATH unlock --raw`'
+        python3 bitwarden-to-keepass.py \
+          --bw-session `$BW_PATH login --raw || $BW_PATH unlock --raw` \
+          --recreate-database
+      '
     volumes:
       - ./exports:/exports
       - 'bw-config:/root/.config/Bitwarden CLI'

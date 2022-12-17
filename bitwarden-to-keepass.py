@@ -27,7 +27,10 @@ kp: Optional[PyKeePass] = None
 def bitwarden_to_keepass(args):
     global kp
     try:
-        kp = PyKeePass(args.database_path, password=args.database_password, keyfile=args.database_keyfile)
+        if args.recreate_database:
+            kp = create_database(args.database_path, password=args.database_password, keyfile=args.database_keyfile)
+        else:
+            kp = PyKeePass(args.database_path, password=args.database_password, keyfile=args.database_keyfile)
     except FileNotFoundError:
         logging.info('KeePass database does not exist, creating a new one.')
         kp = create_database(args.database_path, password=args.database_password, keyfile=args.database_keyfile)
@@ -213,6 +216,12 @@ parser.add_argument(
     '--bw-path',
     help='Path for bw binary',
     default=os.environ.get('BW_PATH', 'bw'),
+)
+parser.add_argument(
+    '--recreate-database',
+    help='Create database from scratch',
+    action='store_true',
+    default=False,
 )
 args = parser.parse_args()
 
