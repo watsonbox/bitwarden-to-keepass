@@ -69,6 +69,9 @@ def bitwarden_to_keepass(args):
                         continue
                     raise
 
+            entry.set_custom_property("Bitwarden Created At", bw_item.get_creation_date())
+            entry.set_custom_property("Bitwarden Updated At", bw_item.get_revision_date())
+
             totp_secret, totp_settings = bw_item.get_totp()
             if totp_secret and totp_settings:
                 entry.set_custom_property('TOTP Seed', totp_secret, protect=True)

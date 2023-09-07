@@ -23,6 +23,12 @@ class Item:
     def get_name(self) -> str:
         return self.item['name']
 
+    def get_creation_date(self) -> str:
+        return self.item['creationDate']
+
+    def get_revision_date(self) -> str:
+        return self.item['revisionDate']
+
     def get_folder_id(self) -> str:
         return self.item['folderId']
 
