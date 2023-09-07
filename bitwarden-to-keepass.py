@@ -77,11 +77,11 @@ def bitwarden_to_keepass(args):
             uris = [uri['uri'] for uri in bw_item.get_uris()]
             set_kp_entry_urls(entry, uris)
 
-            if item["type"] in [ItemTypes.CARD]:
+            if item["type"] in [ItemType.CARD]:
                 for card_item in bw_item.get_card_fields():
                     entry.set_custom_property(card_item, bw_item.get_card_fields()[card_item])
 
-            if item["type"] in [ItemTypes.IDENTITY]:
+            if item["type"] in [ItemType.IDENTITY]:
                 for identity_item in bw_item.get_identity_fields():
                     entry.set_custom_property(identity_item, bw_item.get_identity_fields()[identity_item])
 
