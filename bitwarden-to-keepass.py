@@ -14,7 +14,7 @@ from pykeepass.group import Group as KPGroup
 from pykeepass.entry import Entry as KPEntry
 
 import folder as FolderType
-from item import Item, Types as ItemTypes
+from item import Item, ItemType, CustomFieldType
 
 logging.basicConfig(
     level=logging.INFO,
@@ -71,7 +71,7 @@ def bitwarden_to_keepass(args):
 
             totp_secret, totp_settings = bw_item.get_totp()
             if totp_secret and totp_settings:
-                entry.set_custom_property('TOTP Seed', totp_secret)
+                entry.set_custom_property('TOTP Seed', totp_secret, protect=True)
                 entry.set_custom_property('TOTP Settings', totp_settings)
 
             uris = [uri['uri'] for uri in bw_item.get_uris()]
@@ -86,7 +86,11 @@ def bitwarden_to_keepass(args):
                     entry.set_custom_property(identity_item, bw_item.get_identity_fields()[identity_item])
 
             for field in bw_item.get_custom_fields():
-                entry.set_custom_property(field['name'], field['value'])
+                entry.set_custom_property(
+                    field['name'],
+                    field['value'],
+                    protect=field['type'] == CustomFieldType.HIDDEN,
+                )
 
             for attachment in bw_item.get_attachments():
                 attachment_raw = subprocess.check_output([
